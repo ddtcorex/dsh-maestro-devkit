@@ -19,6 +19,7 @@ export interface DevKitConfig {
     watch?: boolean;
     verifyTunnel?: boolean;
 }
+export declare const inject: readonly ["tools", "connection"];
 export declare function apply(ctx: Context, config?: DevKitConfig): void;
 declare const _default: {
     apply: typeof apply;
