@@ -1,0 +1,10 @@
+# dsh-maestro-devkit bundle patch: general development toolkit for DSH
+# Host isolate realm + Client overlay. Tunnel-aware (local + https://tunnel.example.com).
+- insert:
+    - id: maestro-devkit
+      name: '@ddtcorex/dsh-maestro-devkit'
+      isolate: devkit
+      config:
+        targetUrl: auto
+        watch: true
+        verifyTunnel: true

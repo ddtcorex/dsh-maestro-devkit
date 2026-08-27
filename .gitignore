@@ -1,0 +1,11 @@
+.DS_Store
+*.log
+node_modules/
+.client-build/
+lib.bak-*/
+docs-local/
+.worktrees/
+
+!AGENTS.md
+!CLAUDE.md
+!docs/superpowers
