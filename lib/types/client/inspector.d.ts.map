@@ -1,0 +1,1 @@
+{"version":3,"file":"inspector.d.ts","sourceRoot":"","sources":["../../../src/client/inspector.tsx"],"names":[],"mappings":"AAAA,OAAO,KAAK,KAAK,MAAM,OAAO,CAAC;AAE/B,wBAAgB,SAAS,CAAC,EAAE,aAAa,EAAE,MAAM,EAAE,EAAE;IAAE,aAAa,CAAC,EAAE,MAAM,CAAC,MAAM,EAAE,MAAM,CAAC,CAAC;IAAC,MAAM,CAAC,EAAE,OAAO,EAAE,CAAA;CAAE;;;;;;;gBAKlH"}

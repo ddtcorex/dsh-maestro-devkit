@@ -1,21 +1,17 @@
-// React imported via jsx runtime — no direct import needed for scaffold
+import * as React from 'react';
+import { OverlayToolbar } from './overlay.js';
 
 /**
  * dsh-maestro-devkit — client half
- * Overlay + inspector + sandbox slots. Real UI in Phase 1.
+ * Overlay + inspector + sandbox slots.
  */
 
 export function apply(ctx: any) {
-  // Placeholder: register slots as reversible effects
   ctx.effect(() => {
     const slots = ctx.slots;
     if (!slots?.inject) return () => {};
-
-    // Overlay placeholder — will inject real toolbar in Phase 1
-    // slots.inject('layout:main', () => React.createElement(...))
-    // slots.inject('shell:overlay', ...)
-
-    return () => {};
+    const dispose = slots.inject('shell:overlay', () => React.createElement(OverlayToolbar, {}));
+    return () => { try { dispose?.(); } catch {} };
   });
 
   // Example: expose a simple status component for verification

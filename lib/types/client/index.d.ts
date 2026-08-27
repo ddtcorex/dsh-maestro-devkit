@@ -1,6 +1,6 @@
 /**
  * dsh-maestro-devkit — client half
- * Overlay + inspector + sandbox slots. Real UI in Phase 1.
+ * Overlay + inspector + sandbox slots.
  */
 export declare function apply(ctx: any): void;
 declare const _default: {
