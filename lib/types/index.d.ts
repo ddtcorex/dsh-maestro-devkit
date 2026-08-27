@@ -7,6 +7,7 @@ import type { Context } from '@deepseek-ai/cordis';
 import { resolveTargetUrl } from './config.js';
 export { resolveTargetUrl };
 export { capture, VIEWPORTS } from './capture.js';
+export { inspect } from './inspect.js';
 export interface DevKitConfig {
     targetUrl?: string | null;
     watch?: boolean;
