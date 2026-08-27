@@ -9,11 +9,15 @@ import { resolveTargetUrl } from './config.js';
 import { capture } from './capture.js';
 import { inspect } from './inspect.js';
 import { classify, hmrClassify } from './hmr.js';
+import { isolate } from './isolate.js';
+import { cordisInspect, sessionInspect } from './cordis.js';
 
 export { resolveTargetUrl };
 export { capture, VIEWPORTS } from './capture.js';
 export { inspect } from './inspect.js';
 export { classify, hmrClassify } from './hmr.js';
+export { isolate, isolateUrl } from './isolate.js';
+export { cordisInspect, sessionInspect } from './cordis.js';
 
 export interface DevKitConfig {
   targetUrl?: string | null; // auto | local | tunnel | explicit URL
@@ -64,14 +68,14 @@ export function apply(ctx: Context, config: DevKitConfig = {}) {
       const action = classify(changedFile);
       return { action, changedFile, verifyTunnel: true, config };
     });
-    register('frontend_isolate', 'Sandbox single slot — scaffold', async () => {
-      return { status: 'scaffold' };
+    register('frontend_isolate', 'Sandbox single slot (isolate)', async (input: any) => {
+      return await isolate(input ?? { slot: 'layout:main' }, ctx as any);
     });
-    register('devkit_cordis_inspect', 'Inspect Cordis services/events/slots — scaffold', async () => {
-      return { status: 'scaffold' };
+    register('devkit_cordis_inspect', 'Inspect Cordis services/events/slots (progressive)', async (input: any) => {
+      return await cordisInspect(input ?? {}, ctx as any);
     });
-    register('devkit_session', 'Inspect DSH sessions — scaffold', async () => {
-      return { status: 'scaffold' };
+    register('devkit_session', 'Inspect DSH sessions (cwd aware)', async (input: any) => {
+      return await sessionInspect(input ?? {}, ctx as any);
     });
     register('devkit_govard', 'Govard wrapper — scaffold', async () => {
       return { status: 'scaffold' };
