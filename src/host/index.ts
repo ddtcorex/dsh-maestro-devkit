@@ -5,6 +5,11 @@
  */
 
 import type { Context } from '@deepseek-ai/cordis';
+import { resolveTargetUrl } from './config.js';
+import { capture } from './capture.js';
+
+export { resolveTargetUrl };
+export { capture, VIEWPORTS } from './capture.js';
 
 export interface DevKitConfig {
   targetUrl?: string | null; // auto | local | tunnel | explicit URL
@@ -36,8 +41,16 @@ export function apply(ctx: Context, config: DevKitConfig = {}) {
       }
     };
 
-    register('frontend_capture', 'Capture DSH Web UI (3 viewports + DOM + geometry, tunnel-aware) — scaffold', async () => {
-      return { status: 'scaffold', message: 'frontend_capture will be implemented in Phase 1 — see docs/specs/2026-08-28-dsh-devkit-design.md' };
+    register('frontend_capture', 'Capture DSH Web UI (3 viewports + DOM + geometry, tunnel-aware)', async (input: any) => {
+      const opts = {
+        targetUrl: input?.targetUrl ?? config.targetUrl ?? 'auto',
+        viewport: input?.viewport ?? 'all',
+        fullPage: Boolean(input?.fullPage),
+        withDOM: Boolean(input?.withDOM),
+        sessionId: input?.sessionId,
+      };
+      const result = await capture(opts as any);
+      return result;
     });
     register('frontend_inspect', 'Inspect computedStyle + tokens + slots — scaffold', async () => {
       return { status: 'scaffold' };
