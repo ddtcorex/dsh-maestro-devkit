@@ -11,6 +11,9 @@ export { inspect } from './inspect.js';
 export { classify, hmrClassify } from './hmr.js';
 export { isolate, isolateUrl } from './isolate.js';
 export { cordisInspect, sessionInspect } from './cordis.js';
+export { govardRun } from './govard.js';
+export { skillsAction } from './skills.js';
+export { pluginAction } from './plugin.js';
 export interface DevKitConfig {
     targetUrl?: string | null;
     watch?: boolean;

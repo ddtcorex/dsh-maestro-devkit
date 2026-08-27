@@ -11,6 +11,9 @@ import { inspect } from './inspect.js';
 import { classify, hmrClassify } from './hmr.js';
 import { isolate } from './isolate.js';
 import { cordisInspect, sessionInspect } from './cordis.js';
+import { govardRun } from './govard.js';
+import { skillsAction } from './skills.js';
+import { pluginAction } from './plugin.js';
 
 export { resolveTargetUrl };
 export { capture, VIEWPORTS } from './capture.js';
@@ -18,6 +21,9 @@ export { inspect } from './inspect.js';
 export { classify, hmrClassify } from './hmr.js';
 export { isolate, isolateUrl } from './isolate.js';
 export { cordisInspect, sessionInspect } from './cordis.js';
+export { govardRun } from './govard.js';
+export { skillsAction } from './skills.js';
+export { pluginAction } from './plugin.js';
 
 export interface DevKitConfig {
   targetUrl?: string | null; // auto | local | tunnel | explicit URL
@@ -77,14 +83,14 @@ export function apply(ctx: Context, config: DevKitConfig = {}) {
     register('devkit_session', 'Inspect DSH sessions (cwd aware)', async (input: any) => {
       return await sessionInspect(input ?? {}, ctx as any);
     });
-    register('devkit_govard', 'Govard wrapper — scaffold', async () => {
-      return { status: 'scaffold' };
+    register('devkit_govard', 'Govard wrapper (session cwd aware)', async (input: any) => {
+      return await govardRun(input ?? { cmd: 'make test' }, ctx as any);
     });
-    register('devkit_skills', 'Skills wrapper — scaffold', async () => {
-      return { status: 'scaffold' };
+    register('devkit_skills', 'Skills wrapper (list/scaffold)', async (input: any) => {
+      return await skillsAction(input ?? { action: 'list' }, ctx as any);
     });
-    register('devkit_plugin', 'Dynamic Cordis plugin lifecycle — scaffold', async () => {
-      return { status: 'scaffold' };
+    register('devkit_plugin', 'Dynamic Cordis plugin lifecycle', async (input: any) => {
+      return await pluginAction(input ?? { action: 'define' }, ctx as any);
     });
 
     log.info(`maestro-devkit host registered 9 tools (targetUrl=${config.targetUrl ?? 'auto'})`);
