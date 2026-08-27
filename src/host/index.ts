@@ -7,9 +7,11 @@
 import type { Context } from '@deepseek-ai/cordis';
 import { resolveTargetUrl } from './config.js';
 import { capture } from './capture.js';
+import { inspect } from './inspect.js';
 
 export { resolveTargetUrl };
 export { capture, VIEWPORTS } from './capture.js';
+export { inspect } from './inspect.js';
 
 export interface DevKitConfig {
   targetUrl?: string | null; // auto | local | tunnel | explicit URL
@@ -52,8 +54,8 @@ export function apply(ctx: Context, config: DevKitConfig = {}) {
       const result = await capture(opts as any);
       return result;
     });
-    register('frontend_inspect', 'Inspect computedStyle + tokens + slots — scaffold', async () => {
-      return { status: 'scaffold' };
+    register('frontend_inspect', 'Inspect computedStyle + tokens + slots (tunnel-aware)', async (input: any) => {
+      return await inspect(input ?? {}, ctx as any);
     });
     register('frontend_hmr', 'Classify HMR need and trigger — scaffold', async () => {
       return { status: 'scaffold', config };
