@@ -31,12 +31,14 @@ export interface DevKitConfig {
   verifyTunnel?: boolean;
 }
 
+export const inject = ['tools', 'connection'] as const
+
 export function apply(ctx: Context, config: DevKitConfig = {}) {
   const log = ctx.logger?.('maestro-devkit') ?? { info: () => {}, warn: () => {}, error: () => {} };
 
   // Register tools as reversible effects
   ctx.effect(() => {
-    const tools = (ctx as any).tools;
+    const tools: any = (ctx as any).get?.('tools');
     if (!tools?.register) {
       log.warn('tools registry not available, devkit tools not registered');
       return () => {};
@@ -102,11 +104,15 @@ export function apply(ctx: Context, config: DevKitConfig = {}) {
 
   // Host→Client RPC (placeholder, real in Phase 1)
   ctx.effect(() => {
-    const conn = (ctx as any).connection;
+    const conn: any = (ctx as any).get?.('connection');
     if (!conn?.rpc?.handle) return () => {};
-    const dispose = conn.rpc.handle('/dsh-maestro-devkit', async (payload: unknown) => {
-      return { echo: payload, status: 'scaffold' };
-    });
+    const dispose = conn.rpc.handle(
+      '/dsh-maestro-devkit',
+      async (payload: unknown) => {
+        return { echo: payload, status: 'scaffold' };
+      },
+      { authority: 'loopback' },
+    );
     return () => { try { dispose?.(); } catch {} };
   });
 }

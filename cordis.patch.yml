@@ -4,6 +4,7 @@
     - id: maestro-devkit
       name: '@ddtcorex/dsh-maestro-devkit'
       isolate: devkit
+      inject: ['tools', 'connection']
       config:
         targetUrl: auto
         watch: true
