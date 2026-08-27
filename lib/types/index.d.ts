@@ -9,6 +9,8 @@ export { resolveTargetUrl };
 export { capture, VIEWPORTS } from './capture.js';
 export { inspect } from './inspect.js';
 export { classify, hmrClassify } from './hmr.js';
+export { isolate, isolateUrl } from './isolate.js';
+export { cordisInspect, sessionInspect } from './cordis.js';
 export interface DevKitConfig {
     targetUrl?: string | null;
     watch?: boolean;
