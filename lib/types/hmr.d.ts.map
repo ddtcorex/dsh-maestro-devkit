@@ -1,0 +1,1 @@
+{"version":3,"file":"hmr.d.ts","sourceRoot":"","sources":["../../src/host/hmr.ts"],"names":[],"mappings":"AAAA;;GAEG;AAEH,MAAM,MAAM,SAAS,GAAG,WAAW,GAAG,cAAc,GAAG,cAAc,GAAG,gBAAgB,CAAC;AAEzF,wBAAgB,QAAQ,CAAC,IAAI,EAAE,MAAM,GAAG,SAAS,CAQhD;AAED,wBAAsB,WAAW,CAAC,KAAK,EAAE;IAAE,WAAW,EAAE,MAAM,CAAC;IAAC,SAAS,CAAC,EAAE,MAAM,CAAA;CAAE;;;;GAGnF"}
