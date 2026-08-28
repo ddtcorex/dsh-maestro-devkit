@@ -31,7 +31,7 @@ export interface DevKitConfig {
   verifyTunnel?: boolean;
 }
 
-export const inject = ['tools', 'connection'] as const
+export const inject = ['tools', 'harness'] as const
 
 export function apply(ctx: Context, config: DevKitConfig = {}) {
   const log = ctx.logger?.('maestro-devkit') ?? { info: () => {}, warn: () => {}, error: () => {} };
@@ -102,25 +102,24 @@ export function apply(ctx: Context, config: DevKitConfig = {}) {
     };
   });
 
-  // Host→Client RPC for floating bar
+  // Host→Client RPC for floating bar (package-private via harness/host)
   ctx.effect(() => {
-    const conn: any = (ctx as any).get?.('connection');
-    if (!conn?.rpc?.handle) return () => {};
-    const dispose = conn.rpc.handle(
-      '/dsh-maestro-devkit',
-      async (payload: any) => {
-        const action = payload?.action;
-        if (action === 'capture') {
-          return await capture({ targetUrl: config.targetUrl ?? 'auto' } as any);
-        }
-        if (action === 'inspect') {
-          return await inspect(payload ?? {}, ctx as any);
-        }
-        return { echo: payload, status: 'ok' };
-      },
-      { authority: 'loopback' },
+    const harness: any = (ctx as any).get?.('harness') ?? (ctx as any).harness;
+    if (!harness?.handle) return () => {};
+    const disposers: Array<() => void> = [];
+    disposers.push(
+      harness.handle('devkit.capture', async (payload: any) => {
+        return await capture({ targetUrl: payload?.targetUrl ?? config.targetUrl ?? 'auto' } as any);
+      }),
     );
-    return () => { try { dispose?.(); } catch {} };
+    disposers.push(
+      harness.handle('devkit.inspect', async (payload: any) => {
+        return await inspect(payload ?? {}, ctx as any);
+      }),
+    );
+    return () => {
+      for (const d of disposers) try { (d as any)?.(); } catch {}
+    };
   });
 }
 
