@@ -9,13 +9,22 @@ import { OverlayToolbar } from './overlay.js';
  * not yet propagated. Safe early-return if slots unavailable.
  */
 
+export const inject = ['slots'] as const;
+
 export function apply(ctx: any) {
   ctx.effect(() => {
-    const slots = (ctx as any).get?.('slots') as { inject?: (name: string, factory: () => unknown) => () => void } | undefined;
-    if (!slots?.inject) return () => {};
-    const dispose = slots.inject('shell:overlay', () => React.createElement(OverlayToolbar, {}));
+    const slots: any = (ctx as any).slots ?? (ctx as any).get?.('slots');
+    if (!slots?.inject || !slots?.register) return () => {};
+    const dispose = slots.inject('shell.overlay', () =>
+      slots.register(
+        { name: 'shell.overlay', id: 'maestro-devkit-overlay', order: 100 },
+        () => React.createElement(OverlayToolbar, {}),
+      ),
+    );
     return () => {
-      try { dispose?.(); } catch {}
+      try {
+        dispose?.();
+      } catch {}
     };
   });
 
@@ -25,4 +34,4 @@ export function apply(ctx: any) {
   });
 }
 
-export default { apply };
+export default { inject, apply };
