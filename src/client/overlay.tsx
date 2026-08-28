@@ -20,7 +20,7 @@ export function OverlayToolbar({ onCapture, onInspect }: { onCapture?: () => voi
     {
       style: {
         position: 'fixed',
-        top: 12,
+        top: 48,
         right: 12,
         zIndex: 9999,
         display: 'inline-flex',
