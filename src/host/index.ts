@@ -102,14 +102,21 @@ export function apply(ctx: Context, config: DevKitConfig = {}) {
     };
   });
 
-  // Host→Client RPC (placeholder, real in Phase 1)
+  // Host→Client RPC for floating bar
   ctx.effect(() => {
     const conn: any = (ctx as any).get?.('connection');
     if (!conn?.rpc?.handle) return () => {};
     const dispose = conn.rpc.handle(
       '/dsh-maestro-devkit',
-      async (payload: unknown) => {
-        return { echo: payload, status: 'scaffold' };
+      async (payload: any) => {
+        const action = payload?.action;
+        if (action === 'capture') {
+          return await capture({ targetUrl: config.targetUrl ?? 'auto' } as any);
+        }
+        if (action === 'inspect') {
+          return await inspect(payload ?? {}, ctx as any);
+        }
+        return { echo: payload, status: 'ok' };
       },
       { authority: 'loopback' },
     );
