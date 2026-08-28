@@ -2,7 +2,7 @@
 
 General development toolkit for DeepSeek Harness — visual review, HMR, style inspector, Cordis/Govard/Skills dev (tunnel-aware).
 
-Part of the `dsh-maestro-*` granular suite. See `<workspace-root>/docs/specs/2026-08-28-dsh-devkit-design.md` for the full design (8 sections).
+Part of the `dsh-maestro-*` granular suite.
 
 ## What you get
 
@@ -32,7 +32,3 @@ pnpm verify
 pnpm build
 pnpm test
 ```
-
-## Design
-
-See `<workspace-root>/docs/specs/2026-08-28-dsh-devkit-design.md` (8 sections, tunnel-aware, 5 Hard Rules).

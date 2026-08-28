@@ -4,11 +4,17 @@ All notable changes to this project are documented in this file. Format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); this project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.2] - 2026-08-28
+
+### Fixed
+
+- Fix CHANGELOG itself to not list private hostnames literally (follow-up to 0.1.1). Ensures `npm view` and tarball are fully anonymized; deprecate 0.1.0 and 0.1.1.
+
 ## [0.1.1] - 2026-08-28
 
 ### Fixed
 
-- Anonymize private tunnel hostnames (`dsh-company.ddtcorex.com`, `dsh-home.ddtcorex.com`) → `tunnel.example.com` in README, AGENTS, cordis.patch.yml, tests, and docs. Previous `0.1.0` tarball leaked private hostnames; `0.1.0` is deprecated — use `0.1.1`.
+- Anonymize private tunnel hostnames (private `*.ddtcorex.com` hostnames → `tunnel.example.com`) in README, AGENTS, cordis.patch.yml, tests, and docs. Previous `0.1.0` tarball leaked private hostnames; `0.1.0` is deprecated — use `0.1.1`.
 
 ## [0.1.0] - 2026-08-28
 
