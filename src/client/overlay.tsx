@@ -56,7 +56,7 @@ export function OverlayToolbar({ onCapture, onInspect }: { onCapture?: () => voi
       },
       'Inspect',
     ),
-    React.createElement('span', { style: { color: 'var(--dsw-alias-label-secondary)', font: 'var(--dsw-font-s-regular-10, 400 10px / 14px var(--dsw-font-family-base))', padding: '0 3px' } }, 'DevKit'),
+    React.createElement('span', { style: { color: 'var(--dsw-alias-label-secondary)', padding: '0 3px' } }, 'DevKit'),
   );
 }
 
