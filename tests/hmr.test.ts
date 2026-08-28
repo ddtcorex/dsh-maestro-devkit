@@ -7,5 +7,5 @@ describe('classify HMR', () => {
   it('css.ts → build:client', () => expect(classify('packages/dsh-maestro-devkit/src/client/styles/layout.css.ts')).toBe('build:client'));
   it('host → host-restart', () => expect(classify('packages/dsh-maestro-devkit/src/host/index.ts')).toBe('host-restart'));
   it('cordis.patch.yml → host-restart', () => expect(classify('packages/dsh-maestro-devkit/cordis.patch.yml')).toBe('host-restart'));
-  it('preset → preset-restart', () => expect(classify('/home/kai/.dsh/.agent-presets/coder/agent.cordis.yml')).toBe('preset-restart'));
+  it('preset → preset-restart', () => expect(classify('/home/user/.dsh/.agent-presets/coder/agent.cordis.yml')).toBe('preset-restart'));
 });
