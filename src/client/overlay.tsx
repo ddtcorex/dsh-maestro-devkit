@@ -1,6 +1,14 @@
 import * as React from 'react';
 
-export function OverlayToolbar({ onCapture, onInspect }: { onCapture?: () => void; onInspect?: () => void }) {
+export function OverlayToolbar({
+  onCapture,
+  onInspect,
+  onIsolate,
+}: {
+  onCapture?: () => void;
+  onInspect?: () => void;
+  onIsolate?: () => void;
+}) {
   const btnBase: React.CSSProperties = {
     display: 'inline-flex',
     alignItems: 'center',
@@ -13,6 +21,10 @@ export function OverlayToolbar({ onCapture, onInspect }: { onCapture?: () => voi
     color: 'var(--dsw-alias-label-primary)',
     cursor: 'pointer',
     whiteSpace: 'nowrap',
+  };
+  const hoverProps = {
+    onMouseEnter: (e: any) => (e.currentTarget.style.background = 'var(--dsw-alias-interactive-bg-hover)'),
+    onMouseLeave: (e: any) => (e.currentTarget.style.background = 'var(--dsw-alias-bg-base)'),
   };
   return React.createElement(
     'div',
@@ -36,26 +48,9 @@ export function OverlayToolbar({ onCapture, onInspect }: { onCapture?: () => voi
       role: 'toolbar',
       'aria-label': 'Maestro DevKit',
     },
-    React.createElement(
-      'button',
-      {
-        onClick: onCapture,
-        style: btnBase,
-        onMouseEnter: (e: any) => (e.currentTarget.style.background = 'var(--dsw-alias-interactive-bg-hover)'),
-        onMouseLeave: (e: any) => (e.currentTarget.style.background = 'var(--dsw-alias-bg-base)'),
-      },
-      'Capture',
-    ),
-    React.createElement(
-      'button',
-      {
-        onClick: onInspect,
-        style: btnBase,
-        onMouseEnter: (e: any) => (e.currentTarget.style.background = 'var(--dsw-alias-interactive-bg-hover)'),
-        onMouseLeave: (e: any) => (e.currentTarget.style.background = 'var(--dsw-alias-bg-base)'),
-      },
-      'Inspect',
-    ),
+    React.createElement('button', { onClick: onCapture, style: btnBase, ...hoverProps }, 'Capture'),
+    React.createElement('button', { onClick: onInspect, style: btnBase, ...hoverProps }, 'Inspect'),
+    React.createElement('button', { onClick: onIsolate, style: btnBase, ...hoverProps }, 'Isolate'),
     React.createElement('span', { style: { color: 'var(--dsw-alias-label-secondary)', padding: '0 3px' } }, 'DevKit'),
   );
 }

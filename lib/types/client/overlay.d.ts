@@ -1,7 +1,8 @@
 import * as React from 'react';
-export declare function OverlayToolbar({ onCapture, onInspect }: {
+export declare function OverlayToolbar({ onCapture, onInspect, onIsolate, }: {
     onCapture?: () => void;
     onInspect?: () => void;
+    onIsolate?: () => void;
 }): React.DetailedReactHTMLElement<{
     style: {
         position: "fixed";
@@ -17,7 +18,7 @@ export declare function OverlayToolbar({ onCapture, onInspect }: {
         border: string;
         boxShadow: "var(--dsw-shadow-m, 0 4px 12px rgba(0,0,0,0.12))";
         color: "var(--dsw-alias-label-primary)";
-        font: "var(--dsw-font-s-regular-13, 400 13px/20px var(--dsw-font-family-base))";
+        font: "var(--dsw-font-s-regular-10, 400 10px / 14px var(--dsw-font-family-base))";
     };
     role: "toolbar";
     'aria-label': string;
@@ -25,5 +26,6 @@ export declare function OverlayToolbar({ onCapture, onInspect }: {
 export declare function Overlay(): React.FunctionComponentElement<{
     onCapture?: () => void;
     onInspect?: () => void;
+    onIsolate?: () => void;
 }>;
 //# sourceMappingURL=overlay.d.ts.map

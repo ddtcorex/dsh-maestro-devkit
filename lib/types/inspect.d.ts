@@ -1,6 +1,7 @@
 /**
  * frontend_inspect — computedStyle + tokens + slots
- * Host calls Client RPC /dsh-maestro-devkit to get live DOM data.
+ * Host calls the client's own RPC channel (registered in src/client/index.tsx)
+ * to get live DOM data from the browser tab where the user clicked Inspect.
  */
 export type InspectOpts = {
     selector?: string;
@@ -14,7 +15,10 @@ export type InspectResult = {
     sourceFile?: string;
 };
 export declare function inspect(opts: InspectOpts, ctx: {
-    connection?: any;
-    hostCall?: (channel: string, payload: unknown) => Promise<any>;
+    connection?: {
+        rpc?: {
+            call?: (channel: string, payload: unknown) => Promise<any>;
+        };
+    };
 }): Promise<InspectResult>;
 //# sourceMappingURL=inspect.d.ts.map

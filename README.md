@@ -9,11 +9,16 @@ Part of the `dsh-maestro-*` granular suite.
 | Area | Tools |
 |---|---|
 | **Visual review** | `frontend_capture` — 3 viewports + DOM + geometry, tunnel-aware (`local` / `https://tunnel.example.com`) |
-| **Live iteration** | `frontend_hmr` — chokidar watcher → classify (dist hot-patch / build:client / host restart via dsh-safe-web-update) + verify local+tunnel |
-| **Style debug** | `frontend_inspect` — computedStyle + Theme tokens + slot occupants + source file, inline overlay |
-| **Isolation** | `frontend_isolate` — sandbox single slot with mock props, viewport switcher |
-| **Host dev** | `devkit_cordis_inspect`, `devkit_session`, `devkit_plugin` (dynamic Cordis) |
-| **Govard/Skills** | `devkit_govard`, `devkit_skills` |
+| **Live iteration** | `frontend_hmr` — chokidar watcher, classifies each change (dist hot-patch / build:client / host-restart), curl-verifies the target URL |
+| **Style debug** | `frontend_inspect` — real `getComputedStyle` from the live browser tab via a client-registered RPC channel, inline overlay panel |
+| **Isolation** | `frontend_isolate` — sandbox a single slot via `/?__devkit_sandbox=<slot>&props=<json>`, editable JSON props, viewport switcher |
+| **Session dev** | `devkit_session` — real session list/inspect via `ctx.sessions` |
+| **Govard/Skills** | `devkit_govard` (allowlisted commands only) — `devkit_skills` (real filesystem list/scaffold) |
+
+> `devkit_cordis_inspect` and `devkit_plugin` were removed in `0.2.0` — both
+> duplicated the core `@deepseek-ai/dsh-tool-cordis` extension already loaded
+> in every `dsh web` session (`cordis_inspect_list`/`query`/`self`,
+> `cordis_define`/`run`/`stop`/`undefine`). Use those instead.
 
 ## Install
 

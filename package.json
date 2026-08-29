@@ -1,9 +1,9 @@
 {
   "name": "@ddtcorex/dsh-maestro-devkit",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "private": false,
   "packageManager": "pnpm@11.7.0",
-  "description": "General development toolkit for DeepSeek Harness — visual review, HMR, style inspector, Cordis/Govard/Skills dev (tunnel-aware)",
+  "description": "General development toolkit for DeepSeek Harness \u2014 visual review, HMR, style inspector, Cordis/Govard/Skills dev (tunnel-aware)",
   "type": "module",
   "main": "lib/index.js",
   "types": "lib/types/index.d.ts",
@@ -29,8 +29,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.json && tsc -p tsconfig.client.json && node scripts/build-client.mjs",
     "verify": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.client.json --noEmit",
-    "test": "vitest run",
-    "test:watch": "vitest",
+    "test": "NODE_ENV=test vitest run",
+    "test:watch": "NODE_ENV=test vitest",
     "prepack": "npm run build"
   },
   "dsh": {
@@ -52,12 +52,15 @@
     "react": "^18.2.0"
   },
   "devDependencies": {
+    "@testing-library/react": "^16.3.3",
     "@types/node": "^22.0.0",
     "@types/react": "~18.3.1",
     "@types/react-dom": "~18.3.0",
+    "esbuild": "^0.25.0",
+    "jsdom": "^30.0.1",
+    "react-dom": "^18.3.1",
     "typescript": "^6.0.3",
-    "vitest": "^2.0.0",
-    "esbuild": "^0.25.0"
+    "vitest": "^2.0.0"
   },
   "dependencies": {
     "@ddtcorex/dsh-maestro-config-lib": "workspace:^",
