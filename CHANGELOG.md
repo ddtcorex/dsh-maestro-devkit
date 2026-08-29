@@ -4,6 +4,51 @@ All notable changes to this project are documented in this file. Format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); this project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-08-29
+
+### Removed
+
+- `devkit_cordis_inspect` and `devkit_plugin` — both duplicated the core
+  `@deepseek-ai/dsh-tool-cordis` extension already loaded in every `dsh web`
+  session. Use `cordis_inspect_list`/`cordis_inspect_query`/`cordis_inspect_self`
+  and `cordis_define`/`cordis_run`/`cordis_stop`/`cordis_undefine` instead.
+
+### Fixed
+
+- `frontend_inspect` now reaches the live browser tab. It previously called
+  the host's own RPC handler channel (`/dsh-maestro-devkit`) — a
+  self-referential call that never left the process. The client now
+  registers its own channel (`/dsh-maestro-devkit-client`) exposing real
+  `getComputedStyle`; host `frontend_inspect` calls that instead.
+
+### Changed
+
+- `frontend_hmr` now runs a real `chokidar` watcher (the dependency was
+  declared since `0.1.0` but unused) that classifies each change and
+  curl-verifies the target URL, instead of only exposing the `classify()`
+  string-matcher with no watcher behind it.
+- `frontend_isolate` now serves its sandbox view via a query param on the
+  existing `/` (`/?__devkit_sandbox=<slot>&props=<json>`) instead of an
+  unregistered `/__frontend_sandbox` route that 404'd. Sandbox's props view
+  is now an editable JSON textarea (was read-only).
+- `devkit_session` now reads real session data from `ctx.sessions` instead
+  of returning a placeholder string.
+- `devkit_govard` now actually spawns the requested command — restricted to
+  a fixed allowlist (`make test`, `make build`, `govard env up`/`down`/`sh`)
+  to close the command-injection surface a freeform string would open on an
+  LLM-driven tool.
+- `devkit_skills` now reads and writes real files under `skills/` instead of
+  returning a hardcoded list and a fake scaffold path.
+- Overlay toolbar gains an "Isolate" button and renders real `Inspector`
+  results inline instead of `window.alert(...)`.
+
+### Added
+
+- `tests/inject-consistency.test.ts` and `tests/safe-access.test.ts` —
+  regression tests for the `inject`-mismatch bug class that crashed
+  `dsh web` boot twice (2026-08-28 slots-fix, 2026-08-29 harness/host
+  incidents), without requiring a real Cordis loader boot.
+
 ## [0.1.2] - 2026-08-28
 
 ### Fixed

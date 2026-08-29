@@ -1,52 +1,57 @@
 import * as React from 'react';
 import { OverlayToolbar } from './overlay.js';
+import { SandboxContainer } from './sandbox.js';
+import { Inspector } from './inspector.js';
 
-/**
- * dsh-maestro-devkit — client half
- * Overlay + inspector + sandbox slots.
- * Uses ctx.get('slots') pattern (no direct ctx.slots) to avoid
- * "cannot get property slots without inject" when inject metadata is
- * not yet propagated. Safe early-return if slots unavailable.
- */
-
-export const inject = ['slots', 'host'] as const;
+export const inject = ['slots', 'connection'] as const;
 
 export function apply(ctx: any) {
   ctx.effect(() => {
+    const params = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
+    if (params.has('__devkit_sandbox')) {
+      const slots: any = (ctx as any).slots ?? (ctx as any).get?.('slots');
+      if (!slots?.inject || !slots?.register) return () => {};
+      const dispose = slots.inject('shell.overlay', () =>
+        slots.register(
+          { name: 'shell.overlay', id: 'maestro-devkit-sandbox', order: 100 },
+          () => React.createElement(SandboxContainer, {}),
+        ),
+      );
+      return () => { try { dispose?.(); } catch {} };
+    }
+
     const slots: any = (ctx as any).slots ?? (ctx as any).get?.('slots');
-    const host: any = (ctx as any).host ?? (ctx as any).get?.('host');
+    const conn: any = (ctx as any).connection ?? (ctx as any).get?.('connection');
     if (!slots?.inject || !slots?.register) return () => {};
+
     const callHost = async (action: string) => {
       try {
-        let res: any;
-        if (action === 'capture' && host?.call) res = await host.call('devkit.capture', {});
-        else if (action === 'inspect' && host?.call) res = await host.call('devkit.inspect', {});
-        else {
-          const conn: any = (ctx as any).get?.('connection');
-          if (conn?.call) res = await conn.call('/dsh-maestro-devkit', { action });
-        }
-        console.log(`[maestro-devkit] ${action} result`, res);
-        try {
-          // lightweight feedback — toast via alert if available
-          if (typeof window !== 'undefined' && (window as any).alert) {
-            const summary = res ? JSON.stringify(res).slice(0, 400) : action + ' done';
-            (window as any).alert(`${action}: ${summary}`);
-          }
-        } catch {}
-        return res;
+        if (conn?.call) return await conn.call('/dsh-maestro-devkit', { action });
+        if (conn?.rpc?.call) return await conn.rpc.call('/dsh-maestro-devkit', { action });
       } catch (e) {
         console.warn('[maestro-devkit] host call failed', e);
-        try { (window as any).alert(`${action} failed: ${String(e)}`); } catch {}
       }
     };
+
     const dispose = slots.inject('shell.overlay', () =>
       slots.register(
         { name: 'shell.overlay', id: 'maestro-devkit-overlay', order: 100 },
-        () =>
-          React.createElement(OverlayToolbar, {
-            onCapture: () => callHost('capture'),
-            onInspect: () => callHost('inspect'),
-          }),
+        () => {
+          const [inspected, setInspected] = React.useState<any>(null);
+          return React.createElement(
+            React.Fragment,
+            null,
+            React.createElement(OverlayToolbar, {
+              onCapture: () => callHost('capture'),
+              onInspect: async () => setInspected(await callHost('inspect')),
+              onIsolate: () => {
+                const url = `/?__devkit_sandbox=${encodeURIComponent('layout:main')}&props=${encodeURIComponent('{}')}`;
+                window.open(url, '_blank');
+              },
+            }),
+            inspected ? React.createElement(Inspector, { computedStyle: inspected.computedStyle, tokens: inspected.tokens }) : null,
+          );
+        },
       ),
     );
     return () => {
@@ -56,9 +61,23 @@ export function apply(ctx: any) {
     };
   });
 
-  // Ensure client bundle is not empty
+  // Host→Client RPC: exposes real DOM introspection to the host's frontend_inspect tool
   ctx.effect(() => {
-    return () => {};
+    const conn: any = (ctx as any).connection ?? (ctx as any).get?.('connection');
+    if (!conn?.rpc?.handle) return () => {};
+    const dispose = conn.rpc.handle('/dsh-maestro-devkit-client', async (opts: any) => {
+      const selector = opts?.selector;
+      let computedStyle: Record<string, string> = {};
+      if (selector && typeof document !== 'undefined') {
+        const el = document.querySelector(selector);
+        if (el) {
+          const cs = getComputedStyle(el);
+          computedStyle = { gap: cs.gap, padding: cs.padding, margin: cs.margin, color: cs.color };
+        }
+      }
+      return { computedStyle, tokens: [], slotOccupants: [] };
+    });
+    return () => { try { dispose?.(); } catch {} };
   });
 }
 

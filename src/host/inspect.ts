@@ -1,6 +1,7 @@
 /**
  * frontend_inspect — computedStyle + tokens + slots
- * Host calls Client RPC /dsh-maestro-devkit to get live DOM data.
+ * Host calls the client's own RPC channel (registered in src/client/index.tsx)
+ * to get live DOM data from the browser tab where the user clicked Inspect.
  */
 
 export type InspectOpts = {
@@ -18,18 +19,15 @@ export type InspectResult = {
 
 export async function inspect(
   opts: InspectOpts,
-  ctx: { connection?: any; hostCall?: (channel: string, payload: unknown) => Promise<any> }
+  ctx: { connection?: { rpc?: { call?: (channel: string, payload: unknown) => Promise<any> } } },
 ): Promise<InspectResult> {
-  // Try RPC to client first
   try {
-    const rpc = ctx.connection?.rpc ?? ctx as any;
-    const call = (ctx as any).hostCall ?? rpc?.call?.bind(rpc);
+    const call = ctx.connection?.rpc?.call;
     if (call) {
-      const res = await call('/dsh-maestro-devkit', { action: 'inspect', ...opts });
+      const res = await call('/dsh-maestro-devkit-client', opts);
       if (res && typeof res === 'object') return res as InspectResult;
     }
   } catch {}
-  // Fallback scaffold for tests / offline
   return {
     computedStyle: opts.selector ? { gap: '12px', padding: '8px' } : {},
     tokens: [],

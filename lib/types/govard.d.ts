@@ -8,7 +8,9 @@ export declare function govardRun(opts: {
     sessionCwd?: string;
 }, ctx: any): Promise<{
     cmd: string;
-    cwd: any;
-    note: string;
+    cwd: string;
+    exitCode: number | null;
+    stdout: string;
+    stderr: string;
 }>;
 //# sourceMappingURL=govard.d.ts.map

@@ -8,18 +8,17 @@ import { resolveTargetUrl } from './config.js';
 export { resolveTargetUrl };
 export { capture, VIEWPORTS } from './capture.js';
 export { inspect } from './inspect.js';
-export { classify, hmrClassify } from './hmr.js';
+export { classify, hmrClassify, startHmrWatcher } from './hmr.js';
 export { isolate, isolateUrl } from './isolate.js';
-export { cordisInspect, sessionInspect } from './cordis.js';
+export { sessionInspect } from './cordis.js';
 export { govardRun } from './govard.js';
 export { skillsAction } from './skills.js';
-export { pluginAction } from './plugin.js';
 export interface DevKitConfig {
     targetUrl?: string | null;
     watch?: boolean;
     verifyTunnel?: boolean;
 }
-export declare const inject: readonly ["tools", "connection"];
+export declare const inject: readonly ["tools", "connection", "sessions"];
 export declare function apply(ctx: Context, config?: DevKitConfig): void;
 declare const _default: {
     apply: typeof apply;
