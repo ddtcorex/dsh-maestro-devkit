@@ -4,6 +4,20 @@ All notable changes to this project are documented in this file. Format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); this project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-08-30
+
+### Changed
+
+- **Floating bar redesign — right-anchored, draggable + foldable**: bar defaults to middle-right (`right:0, top:50%`), folded by default, unfolds left with `Fold` (3 vertical lines, no border, `28×28` hit area) on the far right. `Brand` leftmost, `Actions` middle, `Fold` rightmost so `Actions` push left and `Fold` stays stationary. Right-anchored `pos.right` keeps Fold at same viewport X when toggling and survives reloads regardless of folded width. Drag via `Fold` (pointer capture, `didDrag` guard, arrow keys + Home, double-click reset, `clampToViewportRight`). Mobile compact (`32×28` Fold, `30px` buttons), `z100` overlay above `fIyUMG_sidebarCol z40`, `prefers-reduced-motion` support.
+- `src/client/index.tsx` host call now prefers `connection.rpc.call` with fallback and always shows Inspector drawer even on empty `inspect` result.
+- `src/client/overlay.tsx` no longer uses separate drag handle (`IconGrip` removed); `Fold` is both drag handle and toggle with wider hit area and no border.
+
+### Fixed
+
+- First-click buttons being pushed into right sidebar and disappearing (overlay `z-index` below sidebar). Overlay layer now `z-index:100` and bar `10000`.
+- Fold button jumping during expand/collapse and not staying still when bar at custom position. Right-anchored positioning and synchronous `newLeft = oldRight - expectedWidth` keeps Fold stationary without flash.
+- Dragged position not remembered after reload when folded state differed. Pos now stored as `right` distance (`maestro-devkit:bar-pos:right`) instead of `left`.
+
 ## [0.2.0] - 2026-08-29
 
 ### Removed

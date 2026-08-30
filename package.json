@@ -1,6 +1,6 @@
 {
   "name": "@ddtcorex/dsh-maestro-devkit",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": false,
   "packageManager": "pnpm@11.7.0",
   "description": "General development toolkit for DeepSeek Harness \u2014 visual review, HMR, style inspector, Cordis/Govard/Skills dev (tunnel-aware)",

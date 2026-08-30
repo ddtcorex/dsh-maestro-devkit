@@ -25,12 +25,20 @@ export function apply(ctx: any) {
     if (!slots?.inject || !slots?.register) return () => {};
 
     const callHost = async (action: string) => {
-      try {
-        if (conn?.call) return await conn.call('/dsh-maestro-devkit', { action });
-        if (conn?.rpc?.call) return await conn.rpc.call('/dsh-maestro-devkit', { action });
-      } catch (e) {
-        console.warn('[maestro-devkit] host call failed', e);
+      // Prefer rpc.call (registered with authority:loopback on host). Fallback to conn.call for legacy.
+      const tryCall = async (fn: any) => {
+        try { const r = await fn('/dsh-maestro-devkit', { action }); if (r !== undefined) return r; } catch (e) { console.warn('[maestro-devkit] host call failed', e); }
+        return undefined;
+      };
+      if (conn?.rpc?.call) {
+        const r = await tryCall(conn.rpc.call.bind(conn.rpc));
+        if (r !== undefined) return r;
       }
+      if (conn?.call) {
+        const r = await tryCall(conn.call.bind(conn));
+        if (r !== undefined) return r;
+      }
+      return undefined;
     };
 
     const dispose = slots.inject('shell.overlay', () =>
@@ -42,14 +50,24 @@ export function apply(ctx: any) {
             React.Fragment,
             null,
             React.createElement(OverlayToolbar, {
-              onCapture: () => callHost('capture'),
-              onInspect: async () => setInspected(await callHost('inspect')),
+              onCapture: async () => { const r = await callHost('capture'); console.log('[devkit] capture', r); },
+              onInspect: async () => {
+                const r = await callHost('inspect');
+                // Fallback to empty inspector so popup always appears for validation
+                setInspected(r ?? { computedStyle: {}, tokens: [] });
+              },
               onIsolate: () => {
                 const url = `/?__devkit_sandbox=${encodeURIComponent('layout:main')}&props=${encodeURIComponent('{}')}`;
                 window.open(url, '_blank');
               },
             }),
-            inspected ? React.createElement(Inspector, { computedStyle: inspected.computedStyle, tokens: inspected.tokens }) : null,
+            inspected
+              ? React.createElement(Inspector, {
+                  computedStyle: inspected.computedStyle ?? inspected.computed_style ?? {},
+                  tokens: inspected.tokens ?? [],
+                  onClose: () => setInspected(null),
+                })
+              : null,
           );
         },
       ),

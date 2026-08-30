@@ -4,11 +4,7 @@ export declare function Sandbox({ slot, props, onPropsChange, }: {
     props?: any;
     onPropsChange?: (next: any) => void;
 }): React.DetailedReactHTMLElement<{
-    style: {
-        padding: number;
-        border: string;
-        borderRadius: number;
-    };
+    className: string;
 }, HTMLElement>;
 export declare function SandboxContainer(): React.FunctionComponentElement<{
     slot: string;
