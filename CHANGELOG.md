@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file. Format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); this project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] - 2026-09-01
+
+### Changed
+
+- Host-restart classification re-pointed to the supervisor-owned `dsh-safe-restart` skill / `dsh_web_restart` tool (`hmr.ts` now explicitly a consumer — never instructs or executes its own restart). The `dsh-safe-web-update` skill was removed from maestro-skills.
+
 ## [0.3.0] - 2026-08-30
 
 ### Changed
