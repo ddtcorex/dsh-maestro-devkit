@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file. Format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); this project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.2] - 2026-09-01
+
+### Changed
+
+- `frontend_hmr` description reworded: host restarts are delegated to the supervisor `dsh-safe-restart` skill / `dsh_web_restart` tool (devkit stays a consumer).
+
 ## [0.3.1] - 2026-09-01
 
 ### Changed
