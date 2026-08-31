@@ -14,7 +14,7 @@ Part of the Maestro Harness suite (installed as a DSH plugin). Maintained at `dd
 
 - `src/host/index.ts` — host `apply()`: registers 9 tools via reversible effects (`frontend_capture`, `frontend_hmr`, `frontend_inspect`, `frontend_isolate`, `devkit_cordis_inspect`, `devkit_session`, `devkit_plugin`, `devkit_govard`, `devkit_skills`), isolate realm `devkit`, inject `['tools','connection']`.
 - `src/host/capture.ts` — `capture` — 3 viewports + DOM + geometry, tunnel-aware (`local` / `https://tunnel.example.com`).
-- `src/host/hmr.ts` — `classify` / `hmrClassify` — chokidar watcher → dist hot-patch / build:client / host restart via dsh-safe-web-update.
+- `src/host/hmr.ts` — `classify` / `hmrClassify` — chokidar watcher → dist hot-patch / build:client / host restart (delegated to the supervisor `dsh-safe-restart` skill / `dsh_web_restart` tool).
 - `src/host/inspect.ts` — `inspect` — computedStyle + Theme tokens + slot occupants + source file.
 - `src/host/isolate.ts` — `isolate` — sandbox single slot with mock props, viewport switcher.
 - `src/host/cordis.ts` — `cordisInspect` / `sessionInspect` — Cordis / session introspection.
@@ -51,7 +51,7 @@ pnpm build    # tsc host + client && node scripts/build-client.mjs  -> lib/
 
 - **Cordis best practices**: every capability is a reversible effect `ctx.effect(() => ctx.tools.register(...))`, `ctx.on(event)`, `ctx.slots.inject`, `ctx.connection.rpc.handle`. Declare `inject: ['tools','connection']`, use `isolate: devkit` for session-local services, keep strict Host (Node) / Client (browser) split. No global singletons. Use `ctx.get('tools')` / `ctx.get('slots')` safe pattern.
 - **Tunnel-aware**: `targetUrl: auto` resolves to local `:3080` or `https://tunnel.example.com` via config; capture/HMR/inspect verify both.
-- **HMR classification**: `dist` → hot-patch + curl, `build:client` → rebuild + refresh, host → `dsh-safe-web-update` detached restart with ephemeral dry-boot.
+- **HMR classification**: `dist` → hot-patch + curl, `build:client` → rebuild + refresh, host → delegate to the supervisor `dsh-safe-restart` skill's `dsh_web_restart` tool (devkit never instructs/executes its own restart).
 - **Tool calls > LLM**: every deterministic operation is a `ctx.tools.register` tool; LLM is reasoning-only.
 - Keep the host/client split; client bundle injects `['@deepseek-ai/dsh-client-runtime','@deepseek-ai/dsh-client-ui-slots']`.
 - Strict TDD with vitest; `pnpm verify` must be green before commit.

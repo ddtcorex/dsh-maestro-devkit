@@ -32,10 +32,13 @@ function curlStatus(url: string): Promise<string> {
 /**
  * Start a reversible chokidar watcher. On a matched change, classify the
  * action and verify the target URL responds — actually triggering
- * build:client/host-restart is intentionally out of MVP scope here (that
- * would call into dsh-safe-web-update's consent-gated restart flow, which
- * must not be automated silently); this watcher classifies + verifies +
- * logs, giving the developer the same signal frontend_hmr's tool call does.
+ * build:client/host-restart is intentionally out of scope here: devkit is
+ * a consumer only. Host restarts belong to the supervisor-owned
+ * `dsh-safe-restart` skill (`<workspace-root>/packages/dsh-maestro-supervisor/
+ * skills/dsh-safe-restart/SKILL.md`) and its in-session `dsh_web_restart`
+ * tool; devkit must never instruct or execute its own restart. This watcher
+ * classifies + verifies + logs, giving the developer the same signal
+ * frontend_hmr's tool call does.
  */
 export function startHmrWatcher(
   opts: { watchPaths: string[]; targetUrl?: string },
