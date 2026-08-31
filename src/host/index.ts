@@ -73,7 +73,7 @@ export function apply(ctx: Context, config: DevKitConfig = {}) {
     register('frontend_inspect', 'Inspect computedStyle + tokens + slots (tunnel-aware)', async (input: any) => {
       return await inspect(input ?? {}, ctx as any);
     });
-    register('frontend_hmr', 'Classify HMR need and trigger (tunnel double-verify)', async (input: any) => {
+    register('frontend_hmr', 'Classify HMR need and verify (tunnel double-verify; host restart delegated to supervisor dsh-safe-restart)', async (input: any) => {
       const changedFile = input?.changedFile ?? input?.file ?? '';
       const action = classify(changedFile);
       return { action, changedFile, verifyTunnel: true, config };
