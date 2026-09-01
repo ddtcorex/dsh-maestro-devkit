@@ -4,6 +4,14 @@ All notable changes to this project are documented in this file. Format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); this project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Deprecated
+
+- Retire the package without a replacement runtime. Published versions remain
+  available only for rollback; supported ownership has moved to the narrower
+  DSH, Supervisor, Govard, CDP, and skill capabilities documented in README.
+
 ## [0.3.2] - 2026-09-01
 
 ### Changed
