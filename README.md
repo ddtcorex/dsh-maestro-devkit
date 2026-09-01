@@ -1,5 +1,16 @@
 # dsh-maestro-devkit
 
+> **Retired.** This package is being removed from the Maestro runtime because
+> its UI and tools did not complete a demonstrated development workflow and
+> duplicated narrower owners. Existing `0.3.2` artifacts remain installable for
+> rollback, but the package receives no further runtime releases.
+>
+> Use Chrome DevTools/CDP for frontend inspection, package-local build tooling
+> for client iteration, `dsh-maestro-supervisor` plus `dsh-safe-restart` for
+> host reloads, `dsh-maestro-govard` for Govard operations, `maestro-skills` and
+> `skill-creator` for skills, and core Cordis/session tools for introspection.
+> There is no drop-in replacement plugin.
+
 General development toolkit for DeepSeek Harness — visual review, HMR, style inspector, Cordis/Govard/Skills dev (tunnel-aware).
 
 Part of the `dsh-maestro-*` granular suite.
